@@ -5,9 +5,10 @@ public class Main {
         final int imageHeight = 256;
 
         // Render
-        System.out.println("P3\n" + imageWidth + " " + imageHeight + "\n255\n");
+        System.out.println("P3\n" + imageWidth + " " + imageHeight + "\n255");
 
         for (int j = imageHeight - 1; j >= 0; j--) {
+            System.err.println("\rScanlines remaining: " + j);
             for (int i = 0; i < imageWidth; i++) {
                 double r = (double) i / (imageWidth - 1);
                 double g = (double) j / (imageHeight - 1);
@@ -20,5 +21,7 @@ public class Main {
                 System.out.println(ir + " " + ig + " " + ib + "\n");
             }
         }
+
+        System.err.println("\nDone.");
     }
 }
