@@ -26,6 +26,11 @@ public class Vec3 {
         return this.e[2];
     }
 
+    @Override
+    public String toString() {
+        return this.x() + " " + this.y() + " " + this.z();
+    }
+
     public Vec3 scalarMultiplication(final double t) {
         this.e[0] *= t;
         this.e[1] *= t;
@@ -60,4 +65,19 @@ public class Vec3 {
 
         return resultVector;
     }
+
+    public static double dot(final Vec3 u, final Vec3 v) {
+        return u.e[0] * v.e[0] + u.e[1] * v.e[1] + u.e[2] * v.e[2];
+    }
+
+    public static Vec3 cross(final Vec3 u, final Vec3 v) {
+        return new Vec3(u.e[1] * v.e[2] - u.e[2] * v.e[1],
+                        u.e[2] * v.e[0] - u.e[0] * v.e[2],
+                        u.e[0] * v.e[1] - u.e[1] * v.e[0]);
+    }
+
+    public static Vec3 unitVector(final Vec3 v) {
+        return v.scalarDivision(v.length());
+    }
 }
+// TODO: think about how to implement the Color class and the Point3 class.
