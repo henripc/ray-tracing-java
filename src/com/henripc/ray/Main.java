@@ -2,6 +2,8 @@ package com.henripc.ray;
 
 public class Main {
     public static Vector rayColor(final Ray r) {
+        if (hitSphere(new Point3(0, 0, -1), 0.5, r)) return new Color(1, 0, 0);
+        
         final Vector unitDirection = Vector.unitVector(r.getDirection());
         final double t = 0.5 * (unitDirection.y() + 1);
 
@@ -9,6 +11,16 @@ public class Main {
         final Vector secondColor = (new Color(0.5, 0.7, 1)).scalarMultiplication(t);
 
         return Vector.sumOfVectors(firstColor, secondColor);
+    }
+
+    public static boolean hitSphere(final Point3 center, final double radius, final Ray r) {
+        final Vector oc = Vector.sumOfVectors(r.getOrigin(), center.scalarMultiplication(-1));
+        final double a = Vector.dot(r.getDirection(), r.getDirection());
+        final double b = 2 * Vector.dot(oc, r.getDirection());
+        final double c = Vector.dot(oc, oc) - radius * radius;
+        final double discriminant = b * b - 4 * a * c;
+
+        return discriminant > 0;
     }
 
     public static void main(String[] args) throws Exception {
