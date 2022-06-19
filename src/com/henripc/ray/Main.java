@@ -5,7 +5,7 @@ public class Main {
         final HitRecord rec = new HitRecord();
 
         if (world.hit(r, 0, RtWeekend.INFINITY, rec)) {
-            return Vector.sumOfVectors(rec.normal, new Color(1, 1, 1)).scalarMultiplication(0.5);
+            return Vector.sumOfVectors((Vector) rec.fieldsMap.get("normal"), new Color(1, 1, 1)).scalarMultiplication(0.5);
         }
 
         final Vector unitDirection = Vector.unitVector(r.getDirection());
