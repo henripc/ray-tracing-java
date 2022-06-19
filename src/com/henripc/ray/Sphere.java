@@ -28,9 +28,12 @@ public class Sphere implements Hittable {
             if (root < tMin || tMax < root) return false;
         }
 
-        rec.t = root;
-        rec.p = r.at(rec.t);
-        final Vector outwardNormal = Vector.sumOfVectors(rec.p, this.center.scalarMultiplication(-1)).scalarDivision(this.radius);
+        // rec.t = root;
+        // rec.p = r.at(rec.t);
+        rec.fieldsMap.put("t", root);
+        rec.fieldsMap.put("p", r.at((double) rec.fieldsMap.get("t")));
+        final Vector outwardNormal = Vector.sumOfVectors((Vector) rec.fieldsMap.get("p"),
+                                                         this.center.scalarMultiplication(-1)).scalarDivision(this.radius);
         rec.setFaceNormal(r, outwardNormal);
 
         return true;
