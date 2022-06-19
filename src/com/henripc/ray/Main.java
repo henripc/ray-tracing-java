@@ -1,9 +1,13 @@
 package com.henripc.ray;
 
 public class Main {
-    public static Vector rayColor(final Ray r) {
-        if (hitSphere(new Point3(0, 0, -1), 0.5, r)) return new Color(1, 0, 0);
-        
+    public static Vector rayColor(final Ray r, final HittableList world) {
+        final HitRecord rec = new HitRecord();
+
+        if (world.hit(r, 0, RtWeekend.INFINITY, rec)) {
+            return Vector.sumOfVectors(rec.normal, new Color(1, 1, 1)).scalarMultiplication(0.5);
+        }
+
         final Vector unitDirection = Vector.unitVector(r.getDirection());
         final double t = 0.5 * (unitDirection.y() + 1);
 
@@ -13,21 +17,16 @@ public class Main {
         return Vector.sumOfVectors(firstColor, secondColor);
     }
 
-    public static boolean hitSphere(final Point3 center, final double radius, final Ray r) {
-        final Vector oc = Vector.sumOfVectors(r.getOrigin(), center.scalarMultiplication(-1));
-        final double a = Vector.dot(r.getDirection(), r.getDirection());
-        final double b = 2 * Vector.dot(oc, r.getDirection());
-        final double c = Vector.dot(oc, oc) - radius * radius;
-        final double discriminant = b * b - 4 * a * c;
-
-        return discriminant > 0;
-    }
-
     public static void main(String[] args) throws Exception {
         // Image
         final double aspectRatio = 16 / 9.0;
         final int imageWidth = 400;
         final int imageHeight = (int) (imageWidth / aspectRatio);
+
+        // World
+        final HittableList world = new HittableList();
+        world.add(new Sphere(new Point3(0, 0, -1), 0.5));
+        world.add(new Sphere(new Point3(0, -100.5, -1), 100));
 
         // Camera
         final double viewportHeight = 2;
@@ -57,7 +56,7 @@ public class Main {
                                                                                   vertical.scalarMultiplication(v),
                                                                                   origin.scalarMultiplication(-1)));
 
-                final Vector pixelColor = rayColor(r);
+                final Vector pixelColor = rayColor(r, world);
                 Color.writeColor(pixelColor);
             }
         }
