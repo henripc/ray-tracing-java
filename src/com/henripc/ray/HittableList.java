@@ -28,8 +28,8 @@ public class HittableList implements Hittable {
         for (final Hittable object : this.objects) {
             if (object.hit(r, tMin, closestSoFar, tempRec)) {
                 hitAnything = true;
-                closestSoFar = tempRec.t;
-                rec = tempRec;  // FIXME: Need a way to return rec (Java only pass by value)
+                closestSoFar = (double) tempRec.fieldsMap.get("t");
+                rec.fieldsMap.putAll(tempRec.fieldsMap);  
             }
         }
 
