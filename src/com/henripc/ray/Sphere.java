@@ -5,9 +5,9 @@ public class Sphere implements Hittable {
     public double radius;
 
     public Sphere() {}
-    public Sphere(final Point3 cen, final double r) {
-        this.center = cen;
-        this.radius = r;
+    public Sphere(final Point3 center, final double radius) {
+        this.center = center;
+        this.radius = radius;
     }
 
     @Override
