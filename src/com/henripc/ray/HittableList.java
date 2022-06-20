@@ -28,8 +28,12 @@ public class HittableList implements Hittable {
         for (final Hittable object : this.objects) {
             if (object.hit(r, tMin, closestSoFar, tempRec)) {
                 hitAnything = true;
-                closestSoFar = (double) tempRec.fieldsMap.get("t");
-                rec.fieldsMap.putAll(tempRec.fieldsMap);  
+                closestSoFar = tempRec.t;
+
+                rec.p = tempRec.p;
+                rec.normal = tempRec.normal;
+                rec.t = tempRec.t;
+                rec.frontFace = tempRec.frontFace;
             }
         }
 
