@@ -75,4 +75,25 @@ public abstract class Vector {
     public static Vector unitVector(final Vector v) {
         return v.scalarDivision(v.length());
     }
+
+    public static Vector random() {
+        return new Vec3(RtWeekend.randomDouble(), RtWeekend.randomDouble(), RtWeekend.randomDouble());
+    }
+
+    public static Vector random(final double min, final double max) {
+        return new Vec3(RtWeekend.randomDouble(min, max), RtWeekend.randomDouble(min, max), RtWeekend.randomDouble(min, max));
+    }
+
+    public static Vector randomInUnitSphere() {
+        while (true) {
+            final Vector p = Vector.random(-1, 1);
+            if (p.lengthSquared() >= 1) continue;
+
+            return p;
+        }
+    }
+
+    public static Vector randomUniVector() {
+        return unitVector(randomInUnitSphere());
+    }
 }
