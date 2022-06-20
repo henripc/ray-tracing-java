@@ -1,11 +1,15 @@
 package com.henripc.ray;
 
 public class Main {
-    public static Vector rayColor(final Ray r, final HittableList world) {
+    public static Vector rayColor(final Ray r, final HittableList world, final int depth) {
         final HitRecord rec = new HitRecord();
 
-        if (world.hit(r, 0, RtWeekend.INFINITY, rec)) {
-            return Vector.sumOfVectors(rec.normal, new Color(1, 1, 1)).scalarMultiplication(0.5);
+        // If we've exceeded the ray bounce limit, no more light is gathered.
+        if (depth <= 0) return new Color(0, 0, 0);
+
+        if (world.hit(r, 0.001, RtWeekend.INFINITY, rec)) {
+            final Vector target = Vector.sumOfVectors(rec.p, rec.normal, Vector.randomUniVector());
+            return rayColor(new Ray(rec.p, Vector.sumOfVectors(target, rec.p.scalarMultiplication(-1))), world, depth - 1).scalarMultiplication(0.5);
         }
 
         final Vector unitDirection = Vector.unitVector(r.getDirection());
@@ -23,6 +27,7 @@ public class Main {
         final int imageWidth = 400;
         final int imageHeight = (int) (imageWidth / aspectRatio);
         final int samplesPerPixel = 100;
+        final int maxDepth = 50;
 
         // World
         final HittableList world = new HittableList();
@@ -43,7 +48,7 @@ public class Main {
                     final double u = (i + RtWeekend.randomDouble()) / (imageWidth - 1);
                     final double v = (j + RtWeekend.randomDouble()) / (imageHeight - 1);
                     final Ray r = camera.getRay(u, v);
-                    pixelColor = Vector.sumOfVectors(pixelColor, rayColor(r, world));                    
+                    pixelColor = Vector.sumOfVectors(pixelColor, rayColor(r, world, maxDepth));                    
                 }
                 Color.writeColor(pixelColor, samplesPerPixel);
             }
