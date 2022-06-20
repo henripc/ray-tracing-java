@@ -1,19 +1,19 @@
 package com.henripc.ray;
 
 public class Ray {
-    private final Point3 orig;
-    private final Vec3 dir;
+    private final Vector orig;
+    private final Vector dir;
 
-    public Ray(final Point3 origin, final Vec3 direction) {
+    public Ray(final Vector origin, final Vector direction) {
         this.orig = origin;
         this.dir = direction;
     }
 
-    public Point3 getOrigin() {
+    public Vector getOrigin() {
         return this.orig;
     }
 
-    public Vec3 getDirection() {
+    public Vector getDirection() {
         return this.dir;
     }
 
