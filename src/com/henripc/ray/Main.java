@@ -22,6 +22,7 @@ public class Main {
         final double aspectRatio = 16 / 9.0;
         final int imageWidth = 400;
         final int imageHeight = (int) (imageWidth / aspectRatio);
+        final int samplesPerPixel = 100;
 
         // World
         final HittableList world = new HittableList();
@@ -29,18 +30,7 @@ public class Main {
         world.add(new Sphere(new Point3(0, -100.5, -1), 100));
 
         // Camera
-        final double viewportHeight = 2;
-        final double viewportWidth = aspectRatio * viewportHeight;
-        final double focalLength = 1;
-
-        final Vector origin = new Point3(0, 0, 0);
-        final Vector horizontal = new Vec3(viewportWidth, 0, 0);
-        final Vector vertical = new Vec3(0, viewportHeight, 0);
-
-        final Vector lowerLeftCorner = Vector.sumOfVectors(origin,
-                                                           horizontal.scalarMultiplication(-1.0 / 2),
-                                                           vertical.scalarMultiplication(-1.0 / 2),
-                                                           (new Vec3(0, 0, focalLength)).scalarMultiplication(-1));
+        final Camera camera = new Camera();
 
         // Render
         System.out.println("P3\n" + imageWidth + " " + imageHeight + "\n255");
@@ -48,16 +38,14 @@ public class Main {
         for (int j = imageHeight - 1; j >= 0; j--) {
             System.err.println("\rScanlines remaining: " + j);
             for (int i = 0; i < imageWidth; i++) {
-                final double u = (double) i / (imageWidth - 1);
-                final double v = (double) j / (imageHeight - 1);
-
-                final Ray r = new Ray((Point3) origin, (Vec3) Vector.sumOfVectors(lowerLeftCorner,
-                                                                                  horizontal.scalarMultiplication(u),
-                                                                                  vertical.scalarMultiplication(v),
-                                                                                  origin.scalarMultiplication(-1)));
-
-                final Vector pixelColor = rayColor(r, world);
-                Color.writeColor(pixelColor);
+                Vector pixelColor = new Color(0, 0, 0);
+                for (int s = 0; s < samplesPerPixel; s++) {
+                    final double u = (i + RtWeekend.randomDouble()) / (imageWidth - 1);
+                    final double v = (j + RtWeekend.randomDouble()) / (imageHeight - 1);
+                    final Ray r = camera.getRay(u, v);
+                    pixelColor = Vector.sumOfVectors(pixelColor, rayColor(r, world));                    
+                }
+                Color.writeColor(pixelColor, samplesPerPixel);
             }
         }
 
