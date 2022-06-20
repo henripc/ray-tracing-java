@@ -10,11 +10,11 @@ public class Color extends Vector {
         double g = pixelColor.y();
         double b = pixelColor.z();
 
-        // Divide the color by the number of samples.
+        // Divide the color by the number of samples and gamma-correct for gamma=2.
         final double scale = 1.0 / samplesPerPixel;
-        r *= scale;
-        g *= scale;
-        b *= scale;
+        r = Math.sqrt(scale * r);
+        g = Math.sqrt(scale * g);
+        b = Math.sqrt(scale * b);
 
         // Write the translated [0,255] value of each color component.
         final String result = ((int) (256 * RtWeekend.clamp(r, 0, 0.999))) + " " +
