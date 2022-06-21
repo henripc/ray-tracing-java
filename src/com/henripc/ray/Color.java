@@ -1,6 +1,9 @@
 package com.henripc.ray;
 
 public class Color extends Vector {
+    public Color() {
+        super();
+    }
     public Color(final double e0, final double e1, final double e2) {
         super(e0, e1, e2);
     }
