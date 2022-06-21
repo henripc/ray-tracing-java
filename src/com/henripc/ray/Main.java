@@ -5,11 +5,17 @@ public class Main {
         final HitRecord rec = new HitRecord();
 
         // If we've exceeded the ray bounce limit, no more light is gathered.
-        if (depth <= 0) return new Color(0, 0, 0);
+        if (depth <= 0) return new Color();
 
         if (world.hit(r, 0.001, RtWeekend.INFINITY, rec)) {
-            final Vector target = Vector.sumOfVectors(rec.p, rec.normal, Vector.randomUniVector());
-            return rayColor(new Ray(rec.p, Vector.sumOfVectors(target, rec.p.scalarMultiplication(-1))), world, depth - 1).scalarMultiplication(0.5);
+            final Ray scattered = new Ray();
+            final Color attenuation = new Color();
+
+            if (rec.mat.scatter(r, rec, attenuation, scattered)) {
+                return Vector.multiplicationOfVectors(attenuation, rayColor(scattered, world, depth - 1));
+            }
+            
+            return new Color();
         }
 
         final Vector unitDirection = Vector.unitVector(r.getDirection());
@@ -31,8 +37,16 @@ public class Main {
 
         // World
         final HittableList world = new HittableList();
-        world.add(new Sphere(new Point3(0, 0, -1), 0.5));
-        world.add(new Sphere(new Point3(0, -100.5, -1), 100));
+
+        final Material materialGround = new Lambertian(new Color(0.8, 0.8, 0));
+        final Material materialCenter = new Lambertian(new Color(0.7, 0.3, 0.3));
+        final Material materialLeft = new Metal(new Color(0.8, 0.8, 0.8));
+        final Material materialRight = new Metal(new Color(0.8, 0.6, 0.2));
+
+        world.add(new Sphere(new Point3(0, -100.5, -1), 100, materialGround));
+        world.add(new Sphere(new Point3(0, 0, -1), 0.5, materialCenter));
+        world.add(new Sphere(new Point3(-1, 0, -1), 0.5, materialLeft));
+        world.add(new Sphere(new Point3(1, 0, -1), 0.5, materialRight));
 
         // Camera
         final Camera camera = new Camera();
