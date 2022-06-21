@@ -3,6 +3,7 @@ package com.henripc.ray;
 public class HitRecord {
     public Vector p;
     public Vector normal;
+    public Material mat;
     public double t;
     public boolean frontFace;
 
