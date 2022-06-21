@@ -1,7 +1,7 @@
 package com.henripc.ray;
 
 public abstract class Vector {
-    private double[] e; // vector coordinates
+    public double[] e; // vector coordinates
 
     protected Vector() {
         this.e = new double[3];
@@ -62,6 +62,17 @@ public abstract class Vector {
         return resultVector;
     }
 
+    public static Vector multiplicationOfVectors(final Vector... vectors) {
+        final Vector resultVector = new Vec3(1, 1, 1);
+        for (final Vector vector : vectors) {
+            resultVector.e[0] *= vector.x();
+            resultVector.e[1] *= vector.y();
+            resultVector.e[2] *= vector.z();
+        }
+
+        return resultVector;
+    }
+
     public static double dot(final Vector u, final Vector v) {
         return u.e[0] * v.e[0] + u.e[1] * v.e[1] + u.e[2] * v.e[2];
     }
@@ -95,5 +106,15 @@ public abstract class Vector {
 
     public static Vector randomUniVector() {
         return unitVector(randomInUnitSphere());
+    }
+
+    public boolean nearZero() {
+        // Return true if the vector is close to zero in all dimensions.
+        final double s = 1E-8;
+        return (Math.abs(this.e[0]) < s) && (Math.abs(this.e[1]) < s) && (Math.abs(this.e[2]) < s);
+    }
+
+    public static Vector reflect(final Vector v, final Vector n) {
+        return Vector.sumOfVectors(v, n.scalarMultiplication(-2 * Vector.dot(v, n)));
     }
 }
