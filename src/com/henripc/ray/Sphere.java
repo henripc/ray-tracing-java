@@ -3,11 +3,13 @@ package com.henripc.ray;
 public class Sphere implements Hittable {
     public Point3 center;
     public double radius;
+    public Material material;
 
     public Sphere() {}
-    public Sphere(final Point3 center, final double radius) {
+    public Sphere(final Point3 center, final double radius, final Material material) {
         this.center = center;
         this.radius = radius;
+        this.material = material;
     }
 
     @Override
@@ -32,6 +34,7 @@ public class Sphere implements Hittable {
         rec.p = r.at(rec.t);
         final Vector outwardNormal = Vector.sumOfVectors(rec.p, this.center.scalarMultiplication(-1)).scalarDivision(this.radius);
         rec.setFaceNormal(r, outwardNormal);
+        rec.mat = this.material;
 
         return true;
     }    
