@@ -46,11 +46,15 @@ public class Main {
         world.add(new Sphere(new Point3(0, -100.5, -1), 100, materialGround));
         world.add(new Sphere(new Point3(0, 0, -1), 0.5, materialCenter));
         world.add(new Sphere(new Point3(-1, 0, -1), 0.5, materialLeft));
-        world.add(new Sphere(new Point3(-1, 0, -1), -0.4, materialLeft));
+        world.add(new Sphere(new Point3(-1, 0, -1), -0.45, materialLeft));
         world.add(new Sphere(new Point3(1, 0, -1), 0.5, materialRight));
 
         // Camera
-        final Camera camera = new Camera();
+        final Camera camera = new Camera(new Point3(-2, 2, 1),
+                                         new Point3(0, 0, -1),
+                                         new Vec3(0, 1, 0),
+                                         20,
+                                         aspectRatio);
 
         // Render
         System.out.println("P3\n" + imageWidth + " " + imageHeight + "\n255");
