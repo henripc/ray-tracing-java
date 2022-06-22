@@ -39,13 +39,14 @@ public class Main {
         final HittableList world = new HittableList();
 
         final Material materialGround = new Lambertian(new Color(0.8, 0.8, 0));
-        final Material materialCenter = new Lambertian(new Color(0.7, 0.3, 0.3));
-        final Material materialLeft = new Metal(new Color(0.8, 0.8, 0.8), 0.3);
-        final Material materialRight = new Metal(new Color(0.8, 0.6, 0.2), 1);
+        final Material materialCenter = new Lambertian(new Color(0.1, 0.2, 0.5));
+        final Material materialLeft = new Dielectric(1.5);
+        final Material materialRight = new Metal(new Color(0.8, 0.6, 0.2), 0);
 
         world.add(new Sphere(new Point3(0, -100.5, -1), 100, materialGround));
         world.add(new Sphere(new Point3(0, 0, -1), 0.5, materialCenter));
         world.add(new Sphere(new Point3(-1, 0, -1), 0.5, materialLeft));
+        world.add(new Sphere(new Point3(-1, 0, -1), -0.4, materialLeft));
         world.add(new Sphere(new Point3(1, 0, -1), 0.5, materialRight));
 
         // Camera
