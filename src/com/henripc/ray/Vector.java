@@ -125,4 +125,13 @@ public abstract class Vector {
 
         return Vector.sumOfVectors(rOutPerp, rOutParallel);
     }
+
+    public static Vector randomInUnitDisk() {
+        while (true) {
+            final Vector p = new Vec3(RtWeekend.randomDouble(-1, 1), RtWeekend.randomDouble(-1, 1), 0);
+            if (p.lengthSquared() >= 1) continue;
+
+            return p;
+        }
+    }
 }
