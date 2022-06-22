@@ -117,4 +117,12 @@ public abstract class Vector {
     public static Vector reflect(final Vector v, final Vector n) {
         return Vector.sumOfVectors(v, n.scalarMultiplication(-2 * Vector.dot(v, n)));
     }
+
+    public static Vector refract(final Vector uv, final Vector n, final double etaIOverEtaT) {
+        final double cosTheta = Math.min(Vector.dot(uv.scalarMultiplication(-1), n), 1);
+        final Vector rOutPerp = Vector.sumOfVectors(uv, n.scalarMultiplication(cosTheta)).scalarMultiplication(etaIOverEtaT);
+        final Vector rOutParallel = n.scalarMultiplication(-Math.sqrt(Math.abs(1 - rOutPerp.lengthSquared())));
+
+        return Vector.sumOfVectors(rOutPerp, rOutParallel);
+    }
 }
