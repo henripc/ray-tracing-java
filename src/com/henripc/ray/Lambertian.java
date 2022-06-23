@@ -1,9 +1,9 @@
 package com.henripc.ray;
 
 public class Lambertian implements Material {
-    public Color albedo;
+    public Vector albedo;   // Color
 
-    public Lambertian(final Color a) {
+    public Lambertian(final Vector a) {
         this.albedo = a;
     }
 

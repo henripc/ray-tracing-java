@@ -1,10 +1,10 @@
 package com.henripc.ray;
 
 public class Metal implements Material {
-    public Color albedo;
+    public Vector albedo;   // Color
     public double fuzz;
 
-    public Metal(final Color a, final double fuzz) {
+    public Metal(final Vector a, final double fuzz) {
         this.albedo = a;
         this.fuzz = fuzz < 1 ? fuzz : 1;
     }
