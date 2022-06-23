@@ -27,34 +27,69 @@ public class Main {
         return Vector.sumOfVectors(firstColor, secondColor);
     }
 
+    public static HittableList randomScene() {
+        final HittableList world = new HittableList();
+
+        final Material materialGround = new Lambertian(new Color(0.5, 0.5, 0.5));
+        world.add(new Sphere(new Point3(0, -1000, 0), 1000, materialGround));
+
+        for (int a = -11; a < 11; a++) {
+            for (int b = -11; b < 11; b++) {
+                final double chooseMat = RtWeekend.randomDouble();
+                final Point3 center = new Point3(a + 0.9 * RtWeekend.randomDouble(), 0.2, b + 0.9 * RtWeekend.randomDouble());
+
+                if (Vector.sumOfVectors(center, (new Point3(4, 0.2, 0)).scalarMultiplication(-1)).length() > 0.9) {
+                    Material sphereMaterial;
+
+                    if (chooseMat < 0.8) {
+                        // diffuse
+                        final Vector albedo = Vector.multiplicationOfVectors(Color.random(), Color.random());
+                        sphereMaterial = new Lambertian(albedo);
+                        world.add(new Sphere(center, 0.2, sphereMaterial));
+                    } else if (chooseMat < 0.95) {
+                        // metal
+                        final Vector albedo = Color.random(0.5, 1);
+                        final double fuzz = RtWeekend.randomDouble(0, 0.5);
+                        sphereMaterial = new Metal(albedo, fuzz);
+                        world.add(new Sphere(center, 0.2, sphereMaterial));
+                    } else {
+                        // glass
+                        sphereMaterial = new Dielectric(1.5);
+                        world.add(new Sphere(center, 0.2, sphereMaterial));
+                    }
+                }
+            }
+        }
+        
+        final Material material1 = new Dielectric(1.5);
+        world.add(new Sphere(new Point3(0, 1, 0), 1, material1));
+        
+        final Material material2 = new Lambertian(new Color(0.4, 0.2, 0.1));
+        world.add(new Sphere(new Point3(-4, 1, 0), 1, material2));
+
+        final Material material3 = new Metal(new Color(0.7, 0.6, 0.5), 0);
+        world.add(new Sphere(new Point3(4, 1, 0), 1, material3));
+
+        return world;
+    }
+
     public static void main(String[] args) throws Exception {
         // Image
-        final double aspectRatio = 16 / 9.0;
-        final int imageWidth = 400;
+        final double aspectRatio = 3.0 / 2.0;
+        final int imageWidth = 1200;
         final int imageHeight = (int) (imageWidth / aspectRatio);
-        final int samplesPerPixel = 100;
+        final int samplesPerPixel = 500;
         final int maxDepth = 50;
 
         // World
-        final HittableList world = new HittableList();
-
-        final Material materialGround = new Lambertian(new Color(0.8, 0.8, 0));
-        final Material materialCenter = new Lambertian(new Color(0.1, 0.2, 0.5));
-        final Material materialLeft = new Dielectric(1.5);
-        final Material materialRight = new Metal(new Color(0.8, 0.6, 0.2), 0);
-
-        world.add(new Sphere(new Point3(0, -100.5, -1), 100, materialGround));
-        world.add(new Sphere(new Point3(0, 0, -1), 0.5, materialCenter));
-        world.add(new Sphere(new Point3(-1, 0, -1), 0.5, materialLeft));
-        world.add(new Sphere(new Point3(-1, 0, -1), -0.45, materialLeft));
-        world.add(new Sphere(new Point3(1, 0, -1), 0.5, materialRight));
+        final HittableList world = randomScene();
 
         // Camera
-        final Point3 lookFrom = new Point3(3, 3, 2);
-        final Point3 lookAt = new Point3(0, 0, -1);
+        final Point3 lookFrom = new Point3(13, 2, 3);
+        final Point3 lookAt = new Point3(0, 0, 0);
         final Vec3 vUp = new Vec3(0, 1, 0);
-        final double distToFocus = Vector.sumOfVectors(lookFrom, lookAt.scalarMultiplication(-1)).length();
-        final double aperture = 2;
+        final double distToFocus = 10;
+        final double aperture = 0.1;
 
         final Camera camera = new Camera(lookFrom, lookAt, vUp, 20, aspectRatio, aperture, distToFocus);
 
