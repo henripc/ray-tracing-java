@@ -37,5 +37,5 @@ public class Sphere implements Hittable {
         rec.mat = this.material;
 
         return true;
-    }    
+    }
 }
