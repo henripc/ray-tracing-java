@@ -45,7 +45,8 @@ public class Main {
                         // diffuse
                         final Vector albedo = Vector.multiplicationOfVectors(Color.random(), Color.random());
                         sphereMaterial = new Lambertian(albedo);
-                        world.add(new Sphere(center, 0.2, sphereMaterial));
+                        final Vector center2 = Vector.sumOfVectors(center, new Vec3(0, RtWeekend.randomDouble(0, 0.5), 0));
+                        world.add(new MovingSphere(center, center2, 0, 1, 0.2, sphereMaterial));
                     } else if (chooseMat < 0.95) {
                         // metal
                         final Vector albedo = Color.random(0.5, 1);
@@ -75,10 +76,10 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         // Image
-        final double aspectRatio = 3.0 / 2.0;
-        final int imageWidth = 1200;
+        final double aspectRatio = 16.0 / 9.0;
+        final int imageWidth = 400;
         final int imageHeight = (int) (imageWidth / aspectRatio);
-        final int samplesPerPixel = 500;
+        final int samplesPerPixel = 100;
         final int maxDepth = 50;
 
         // World
@@ -91,7 +92,7 @@ public class Main {
         final double distToFocus = 10;
         final double aperture = 0.1;
 
-        final Camera camera = new Camera(lookFrom, lookAt, vUp, 20, aspectRatio, aperture, distToFocus);
+        final Camera camera = new Camera(lookFrom, lookAt, vUp, 20, aspectRatio, aperture, distToFocus, 0, 1);
 
         // Render
         System.out.println("P3\n" + imageWidth + " " + imageHeight + "\n255");
