@@ -9,10 +9,13 @@ public class Camera {
     private final Vector v;
     private final Vector w;
     private final double lensRadius;
-
+    private final double time0; // shutter open time
+    private final double time1; // shutter close time
+    
     public Camera(final Point3 lookFrom, final Point3 lookAt, final Vec3 vUp,
                   final double vFov, final double aspectRatio,      // vFov vertical field-of-view in degrees
-                  final double aperture, final double focusDist) {
+                  final double aperture, final double focusDist,
+                  final double _time0, final double _time1) {
         final double theta = RtWeekend.degreesToRadians(vFov);
         final double h = Math.tan(theta / 2);
         final double viewportHeight = 2 * h;
@@ -31,6 +34,8 @@ public class Camera {
                                                    w.scalarMultiplication(-focusDist));
 
         this.lensRadius = aperture / 2;
+        this.time0 = _time0;
+        this.time1 = _time1;
     }
 
     public Ray getRay(final double s, final double t) {
@@ -38,10 +43,12 @@ public class Camera {
         final Vector offset = Vector.sumOfVectors(u.scalarMultiplication(rd.x()), v.scalarMultiplication(rd.y()));
         
         final Vector point = Vector.sumOfVectors(this.origin, offset);
-        return new Ray(point, Vector.sumOfVectors(this.lowerLeftCorner,
-                                                  this.horizontal.scalarMultiplication(s),
-                                                  this.vertical.scalarMultiplication(t),
-                                                  this.origin.scalarMultiplication(-1),
-                                                  offset.scalarMultiplication(-1)));
+        return new Ray(point,
+                       Vector.sumOfVectors(this.lowerLeftCorner,
+                                           this.horizontal.scalarMultiplication(s),
+                                           this.vertical.scalarMultiplication(t),
+                                           this.origin.scalarMultiplication(-1),
+                                           offset.scalarMultiplication(-1)),
+                       RtWeekend.randomDouble(this.time0, this.time1));
     }
 }
