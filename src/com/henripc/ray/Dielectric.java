@@ -29,6 +29,7 @@ public class Dielectric implements Material {
 
         scattered.orig = rec.p;
         scattered.dir = direction;
+        scattered.tm = rIn.getTime();
 
         return true;
     }

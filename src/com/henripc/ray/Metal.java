@@ -14,6 +14,7 @@ public class Metal implements Material {
         Vector reflected = Vector.reflect(Vector.unitVector(rIn.getDirection()), rec.normal);
         scattered.orig = rec.p;
         scattered.dir = Vector.sumOfVectors(reflected, Vector.randomInUnitSphere().scalarMultiplication(this.fuzz));
+        scattered.tm = rIn.getTime();
         attenuation.e[0] = this.albedo.x();
         attenuation.e[1] = this.albedo.y();
         attenuation.e[2] = this.albedo.z();

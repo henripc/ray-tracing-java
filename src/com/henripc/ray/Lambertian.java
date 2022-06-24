@@ -16,6 +16,7 @@ public class Lambertian implements Material {
 
         scattered.orig = rec.p;
         scattered.dir = scatterDirection;
+        scattered.tm = rIn.getTime();
         attenuation.e[0] = this.albedo.x();
         attenuation.e[1] = this.albedo.y();
         attenuation.e[2] = this.albedo.z();
