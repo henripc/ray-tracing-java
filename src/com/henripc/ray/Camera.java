@@ -42,8 +42,7 @@ public class Camera {
         final Vector rd = Vector.randomInUnitDisk().scalarMultiplication(this.lensRadius);
         final Vector offset = Vector.sumOfVectors(u.scalarMultiplication(rd.x()), v.scalarMultiplication(rd.y()));
         
-        final Vector point = Vector.sumOfVectors(this.origin, offset);
-        return new Ray(point,
+        return new Ray(Vector.sumOfVectors(this.origin, offset),
                        Vector.sumOfVectors(this.lowerLeftCorner,
                                            this.horizontal.scalarMultiplication(s),
                                            this.vertical.scalarMultiplication(t),
