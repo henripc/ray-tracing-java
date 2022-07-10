@@ -38,4 +38,14 @@ public class Sphere implements Hittable {
 
         return true;
     }
+
+    @Override
+    public boolean boundingBox(final double time0, final double time1, final AABB outputBox) {
+        outputBox.minimum = Vector.sumOfVectors(this.center,
+                                                new Vec3(this.radius, this.radius, this.radius).scalarMultiplication(-1));
+        outputBox.maximum = Vector.sumOfVectors(this.center,
+                                                new Vec3(this.radius, this.radius, this.radius));
+        
+        return true;
+    }
 }
