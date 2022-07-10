@@ -55,4 +55,22 @@ public class MovingSphere implements Hittable {
 
         return true;
     }
+
+    @Override
+    public boolean boundingBox(final double _time0, final double _time1, final AABB outputBox) {
+        final AABB box0 = new AABB(
+            Vector.sumOfVectors(this.center(_time0), new Vec3(this.radius, this.radius, this.radius).scalarMultiplication(-1)),
+            Vector.sumOfVectors(this.center(_time0), new Vec3(this.radius, this.radius, this.radius))
+        );
+
+        final AABB box1 = new AABB(
+                Vector.sumOfVectors(this.center(_time1), new Vec3(this.radius, this.radius, this.radius).scalarMultiplication(-1)),
+                Vector.sumOfVectors(this.center(_time1), new Vec3(this.radius, this.radius, this.radius)));
+
+        final AABB surroundingBox = AABB.surroundingBox(box0, box1);
+        outputBox.minimum = surroundingBox.getMin();
+        outputBox.maximum = surroundingBox.getMax();
+
+        return true;
+    }
 }
