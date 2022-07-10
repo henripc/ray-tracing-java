@@ -39,5 +39,30 @@ public class HittableList implements Hittable {
         }
 
         return hitAnything;
+    }
+
+    @Override
+    public boolean boundingBox(final double time0, final double time1, final AABB outputBox) {
+        if (this.objects.isEmpty()) return false;
+
+        final AABB tempBox = new AABB();
+        boolean firstBox = true;
+
+        for (Hittable object : this.objects) {
+            if (!object.boundingBox(time0, time1, tempBox)) return false;
+
+            if (firstBox) {
+                outputBox.minimum = tempBox.getMin();
+                outputBox.maximum = tempBox.getMax();
+            } else {
+                final AABB surroundingBox = AABB.surroundingBox(outputBox, tempBox);
+                outputBox.minimum = surroundingBox.getMin();
+                outputBox.maximum = surroundingBox.getMax();
+            }
+
+            firstBox = false;
+        }
+
+        return true;
     }    
 }
